@@ -9,7 +9,7 @@ exports.load = function(req, res, next, quizId){
 				next();
 			} else { next(new Error('No existe quizId=' + quizId));}
 			}
-		)catch(function(error){next(error);});
+		).catch(function(error){next(error);});
 };
 
 
