@@ -7,11 +7,11 @@ exports.load = function(req, res, next, quizId){
 			if (quiz) {
 				re.quiz = quiz;
 				next();
-			} else { next(new Error('No existe quizId=' + quizId));}
+				}
+				else { next(new Error('No existe quizId=' + quizId));}
 			}
 		).catch(function(error){next(error);});
 };
-
 
 //GET /quizes
 exports.index= function(req,res){
@@ -35,5 +35,5 @@ exports.answer = function(req, res){
 	if (req.query.respuesta === req.quiz.respuesta) {
 		resultado = 'Correcto'
 		}
-		res.render('quizes/answer', {quiz: req.quiz, respuesta: resultado});
+		else { res.render('quizes/answer', {quiz: req.quiz, respuesta: resultado});}
 };
