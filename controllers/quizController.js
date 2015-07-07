@@ -5,7 +5,7 @@ exports.load = function(req, res, next, quizId){
 	models.Quiz.find(quizId).then(
 		function(quiz){
 			if (quiz) {
-				re.quiz = quiz;
+				req.quiz = quiz;
 				next();
 				}
 				else { next(new Error('No existe quizId=' + quizId)); }
