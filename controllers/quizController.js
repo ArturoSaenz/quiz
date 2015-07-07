@@ -14,12 +14,24 @@ exports.load = function(req, res, next, quizId){
 };
 
 //GET /quizes Controlodor de index en vista views/quizes/index.ejs
-exports.index= function(req,res){
-	models.Quiz.findAll().then(
-		function(quizes){
-			res.render('quizes/index', { quizes: quizes } );
-		}
-  ).catch(function(error){next(error);})
+exports.index = function(req, res){
+  var filtro = req.query.search;
+	var condicion = ('%' + filtro + '%').replace(/ /g,'%');
+
+    if (req.query.search) {
+  		  models.Quiz.findAll({
+    			where: ["pregunta like ?", condicion],
+    			order: [['pregunta', 'ASC']]}
+    			).then(function(quizes) {
+    			res.render('quizes/index.ejs', {quizes: quizes});
+  		  }).catch(function(error) {next(error);});
+	  }else{
+      models.Quiz.findAll().then(
+        function(quizes) {
+        res.render('quizes/index.ejs', { quizes: quizes});
+        }
+      ).catch(function(error){ next(error); })
+	  }
 };
 
 //GET /quizes/question antes de tener DB
@@ -30,9 +42,9 @@ exports.show = function(req, res) {
 
 //GET /quizes/:id/answer
 exports.answer = function(req, res){
-	var resultado = 'Incorrecto';
-	if (req.query.respuesta === req.quiz.respuesta) {
-		resultado = 'Correcto'
-		}
-		res.render('quizes/answer', { quiz: req.quiz, respuesta: resultado });
+  var resultado = 'Incorrecto';
+  if(req.query.respuesta.toUpperCase() === req.quiz.respuesta) {
+    resultado = 'Correcto';
+  }
+  res.render('quizes/answer', {quiz: req.quiz, respuesta: resultado });
 };
