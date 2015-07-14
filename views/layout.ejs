@@ -9,24 +9,36 @@
 	</head>
 	<body>
 		<div id="page-wrap">
-	
-			<header>
-				<h2>Quiz: el juego de las preguntas</h2>
+			<header class="main" id="h1">
+			 <%if(!session.user){%>
+					<span class ="right"><a href="/login">Login</a></span>
+				<%}else{%>
+					<span class ="right"><% session.username%> - <a href="/logout">Logout</a></span>	
+				<%}%>
+
+				<h2>Quiz<span>: el juego de las preguntas</span></h2>
 			</header>
 
 			<nav class="main" id="n1" role="navigation">
 				<span><a href="/">Inicio</a></span>
 				<span><a href="/quizes">Preguntas</a></span>
 				<span><a href="/author">Creditos</a></span>
+				<%if(session.user){%>
+                	<span><a href="/quizes/statistics">Estadísticas</a></span>
+            	<%}%>
 			</nav>
 		
 			<section class="main" id="s1">
-				<div>
-					<table>
-						<tr><td><a href="quizes/1">Capital de Italia</a></td></tr>
-						<tr><td><a href="quizes/1">Capital de Portugal</a></td></tr>
-					</table>
-				</div>
+				<% if (errors.length) { %>
+					<span id='ErrorMsgs'>
+						Corregir errores:<br/>
+						<% for (var i in errors) { %> 
+							<span> <%= errors[i].message %> </span><br/>
+						<% } %> 
+					</span>
+				<% } %>
+
+				<div><%- body %></div>
 			</section>
 
 			<footer class="main" id="f1">

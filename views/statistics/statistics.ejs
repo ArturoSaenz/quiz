@@ -1,0 +1,11 @@
+<h2>Estadísticas</h2><br>
+
+<ul>
+
+	<li>Número total de preguntas: <%= estadisticas.numeroPreguntas %></li>
+	<li>Número total de comentarios: <%= estadisticas.numeroComentarios %></li>
+	<li>Promedio de comentarios: <%= estadisticas.numeroComentarios / estadisticas.numeroPreguntas %></li>
+	<li>Número de preguntas comentadas: <%= estadisticas.preguntasConComentarios %></li>
+	<li>Número de preguntas no comentadas: <%= estadisticas.numeroPreguntas - estadisticas.preguntasConComentarios %></li>
+
+</ul>

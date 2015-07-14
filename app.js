@@ -4,7 +4,9 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var partials = require('express-partials')
+var partials = require('express-partials');
+var methodOverride = require('method-override');
+var session = require('express-session');
 
 var routes = require('./routes/index');
 
@@ -20,9 +22,53 @@ app.use(partials());
 app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
+//Modulo 8. quitamos el false
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+//app.use(bodyParser.urlencoded());
+//Modulo 9 Añadimos semilla para cifrar
+//app.use(cookieParser());
+app.use(cookieParser('Quiz 2015'));
+//Mddulo 9 Instalanos el MW de sesion
+//app.use(session());
+
+app.use(session({
+secret: 'semilla',
+resave: false,
+saveUninitialized: true
+}));
+
+app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
+
+
+//Middleware comprueba sesión inactiva
+app.use(function(req,res,next){
+    console.log('req.session.tiempo= '+req.session.tiempo);
+    if (req.session.user){
+        if(req.session.tiempo && (((new Date()).getTime() - req.session.tiempo) > 120000 )){
+            delete req.session.user;
+            delete req.session.tiempo;
+            console.log('Usuario borrado');
+            res.redirect('/login');
+        }else{
+            req.session.tiempo = (new Date()).getTime();
+        }
+    }
+    next();
+});
+
+// Modulo 9 Helpers dinamicos:
+app.use(function(req, res, next){
+
+    //guardar  path en session.redir para despues login
+    if (!req.path.match(/\/login|\/logout/)){
+        req.session.redir = req.path;
+        }
+        // Hacer visible req.session en las vistas
+        res.locals.session = req.session;
+        next();
+});
+
 
 app.use('/', routes);
 
@@ -42,7 +88,8 @@ if (app.get('env') === 'development') {
         res.status(err.status || 500);
         res.render('error', {
             message: err.message,
-            error: err
+            error: err, 
+            errors: []
         });
     });
 }
@@ -53,7 +100,8 @@ app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
         message: err.message,
-        error: {}
+        error: {},
+        errors: []
     });
 });
 
