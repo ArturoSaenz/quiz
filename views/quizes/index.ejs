@@ -4,6 +4,7 @@
 		<td>
 			<a href="quizes/<%= quizes[i].id %>"><%= quizes[i].pregunta+' ('+quizes[i].tema+')' %></a>
 		</td>
+		<%if(session.user){%>
 		<td>
 			<a href="quizes/<%= quizes[i].id %>/edit"><button>editar</button></a>
 		</td>
@@ -14,12 +15,15 @@
 				</button>
 			</form>
 		</td>
+		<%}%>
 	</tr>
 <% } %>
-</table><p>
+</table>
+<p>
+<%if(session.user){%>
 
 <a href="/quizes/new"><button type="button">Crear pregunta</button></a>
-
+<%}%>
 <form method="get" action="/quizes">
 	<input type="text"  name="search" value="Buscar pregunta" />
 	<input type="submit" value="Buscar" />

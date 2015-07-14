@@ -30,15 +30,27 @@ var sequelize = new Sequelize (DB_name, user, pwd,
 );
 
 //Importar definición de tabla Quiz en quiz.js
-var Quiz = sequelize.import(path.join(__dirname,'quiz'));
-var Comment = sequelize.import(path.join(__dirname,'comment'));
+//var Quiz = sequelize.import(path.join(__dirname,'quiz'));
+//var Comment = sequelize.import(path.join(__dirname,'comment'));
+// Importar definicion de la tabla Quiz
+var quiz_path = path.join(__dirname,'quiz');
+var Quiz = sequelize.import(quiz_path);
+
+// Importar definicion de la tabla Comment
+var comment_path = path.join(__dirname,'comment');
+var Comment = sequelize.import(comment_path);
+
+// Importar definicion de la tabla User
+//var user_path = path.join(__dirname,'user');
+//var User = sequelize.import(user_path);
 
 Comment.belongsTo(Quiz);
 Quiz.hasMany(Comment);
 
-//Exportar definición de tabla Quiz
+//Exportar definición de tabla Quiz y Comment
 exports.Quiz = Quiz;
 exports.Comment = Comment;
+//exports.User = User;
 
 //sequelize.sync() crea e inicializa la tabla de preguntas en BBDD
 sequelize.sync().then(function(){
@@ -48,12 +60,16 @@ sequelize.sync().then(function(){
 			Quiz.create({
 							pregunta: 'Capital de Italia',
 							respuesta: 'Roma',
-							tema: 'Humanidades'
-						});
+							tema: 'Geografia'
+						})
 			Quiz.create({
 							pregunta: 'Capital de Portugal',
 							respuesta: 'Lisboa',
-							tema: 'Humanidades'
+							tema: 'Geografia'
+						})
+			Quiz.create({	pregunta: '¿Quien descrubio America?',
+							respuesta: 'Cristobal Colon',
+							tema: 'Historia'
 						})
 			.then(function(){console.log('Base de datos inicializada')})
 		}

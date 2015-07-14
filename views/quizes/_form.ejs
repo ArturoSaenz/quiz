@@ -5,7 +5,20 @@
 <input type="text" id="resp" name="quiz[respuesta]" value="<%= quiz.respuesta %>" /> <p>
 
 <label for="tema"	class="rem">Tema:</label>
-<input type="text" id="resp" name="quiz[tema]" value="<%= quiz.tema %>" /> <p>
+
+	<select id="tema" name="quiz[tema]">
+  		<option value="humanidades">Humanidades</option>
+ 		<option value="ocio">Ocio</option>
+ 		<option value="ciencia">Ciencia</option>
+ 		<option value="tecnologia">Tecnología</option>
+ 		<option value="geofrafia">Geografía</option>
+ 		<option value="historia">Historia</option>
+	</select>
+	<p>
+
+	<script type="text/javascript">
+		document.getElementById("tema").value = "<%= quiz.tema %>";
+	</script>
 
 <a href="/quizes"><button type="button">Cancelar</button></a>
 
